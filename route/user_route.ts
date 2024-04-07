@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 const { userRegistration, userLogin } = require("../controller/user");
+const { userProfile } = require("../controller/user_details");
 const passport = require("passport");
 
 router.get(
@@ -10,5 +11,6 @@ router.get(
 
 router.post("/user/registration", userRegistration);
 router.post("/user/login", userLogin);
+router.post("/user/profile", userProfile);
 
 module.exports = router;

@@ -18,13 +18,14 @@ const userProfile = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User doesn't exists" });
     }
 
-    console.log("--------------------------------");
-    console.log(existingUser);
-    console.log("--------------------------------");
+    const isMatch = await bcrypt.compare(password, existingUser.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
 
     if (existingUser.user_type === "admin") {
-      const privateUser = await User.findAll({ profile_type: "private" });
-      const publicUser = await User.findAll({ profile_type: "public" });
+      const privateUser = await User.find({ profile_type: "private" });
+      const publicUser = await User.find({ profile_type: "public" });
 
       res.status(200).json({
         message: "Admin user",
@@ -36,11 +37,7 @@ const userProfile = async (req: Request, res: Response) => {
         },
       });
     } else {
-      const profileType = await User.findAll({ profile_type: "public" });
-
-      console.log("--------------------------------");
-      console.log(profileType);
-      console.log("--------------------------------");
+      const profileType = await User.find({ profile_type: "public" });
 
       //show all users which are public users
       res.status(200).json({
@@ -81,10 +78,6 @@ const userUpdate = async (req: Request, res: Response) => {
 
     if (existingUser) {
       updateUser();
-      console.log("--------------------------------");
-      console.log(updateUser);
-      console.log("--------------------------------");
-
       return res
         .status(200)
         .json({ message: "User's details updated successfully" });
