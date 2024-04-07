@@ -57,27 +57,41 @@ const userProfile = async (req: Request, res: Response) => {
 
 const userUpdate = async (req: Request, res: Response) => {
   try {
-    const { name, bio, phone, email, new_password, new_email } = req.body;
+    const {
+      name,
+      bio,
+      phone,
+      email,
+      password,
+      new_password,
+      new_email,
+      profile_type,
+    } = req.body;
 
     const existingUser = await User.findOne({ email: email });
     if (!existingUser) {
       return res.status(404).json({ message: "User doesn't exists" });
     }
 
+    const isMatch = await bcrypt.compare(password, existingUser.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
     const hashedPassword = await bcrypt.hash(new_password, 10);
 
-    const updateUser = await User.insertMany([
+    const updateUser = await User.findOneAndUpdate(
+      { email: email },
       {
         name: name,
         bio: bio,
         phone: phone,
         email: new_email,
         password: hashedPassword,
-      },
-    ]);
-
-    if (existingUser) {
-      updateUser();
+        profile_type: profile_type,
+      }
+    );
+    if (updateUser) {
       return res
         .status(200)
         .json({ message: "User's details updated successfully" });
