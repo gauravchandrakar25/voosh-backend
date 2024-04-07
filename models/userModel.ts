@@ -20,14 +20,17 @@ const userSchema = new mongoose.Schema({
   profile_img: {
     type: String,
     required: false,
+    default: "",
   },
   bio: {
     type: String,
     required: false,
+    default: "",
   },
   user_type: {
     type: String,
     required: false,
+    default: "normal_user",
   },
   phone: {
     type: Number,
