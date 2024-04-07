@@ -1,5 +1,7 @@
 # Voosh Backend Assignment
 
+### Hosted on https://voosh-backend-bvwi.onrender.com/
+
 ## Overview
 
 This project is an enhanced backend API for an authentication system, built using Node.js. It includes features for user registration, login, profile management, and the ability to set profiles as public or private. Admin users have access to both public and private profiles, while normal users can only access public profiles.
