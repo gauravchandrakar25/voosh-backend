@@ -16,13 +16,13 @@ const options = {
   definition: {
     openapi: "3.0.0", // Specification (optional, defaults to swagger: '2.0')
     info: {
-      title: "Voosh APis", // Title (required)
+      title: "Voosh Backend Server", // Title (required)
       version: "1.0.0", // Version (required)
-      description: "API documentation for my APIs for Voosh assignmenr", // Description (optional)
+      description: "API documentation for Voosh assignment", // Description (optional)
     },
   },
   // Paths to the API docs
-  apis: ["./route/user_route"],
+  apis: ["./route/user_route.ts"],
 };
 
 // Initialize Swagger-jsdoc
