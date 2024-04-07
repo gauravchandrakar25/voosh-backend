@@ -1,6 +1,22 @@
 import { Request, Response } from "express";
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req: Request, file: any, cb: any) {
+    cb(null, "uploads/profile_images");
+  },
+  filename: function (req: Request, file: any, cb: any) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+interface MulterRequest extends Request {
+  file: any;
+}
 
 const userProfile = async (req: Request, res: Response) => {
   try {
@@ -101,5 +117,25 @@ const userUpdate = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const profilePicture = async (req: Request, res: Response) => {
+  try {
+    const email = req.body.email;
+    const imageBuffer = (req as MulterRequest).file.buffer;
 
-module.exports = { userProfile, userUpdate };
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    user.profile_img = imageBuffer;
+
+    await user.save();
+
+    res.status(200).json({ msg: "Profile image updated successfully" });
+  } catch (error: any) {
+    console.error(error.message);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+module.exports = { userProfile, userUpdate, profilePicture };

@@ -1,8 +1,18 @@
 import express from "express";
 const router = express.Router();
 const { userRegistration, userLogin } = require("../controller/user");
-const { userProfile, userUpdate } = require("../controller/user_details");
+const {
+  userProfile,
+  userUpdate,
+  profilePicture,
+} = require("../controller/user_details");
 const passport = require("passport");
+
+const multer = require("multer");
+
+const storage = multer.diskStorage({});
+
+const upload = multer({ storage: storage });
 
 router.get(
   "/auth/google",
@@ -210,9 +220,41 @@ router.get(
  *        description: Server Error
  */
 
+/**
+ * @openapi
+ * '/user/upload/profile-pic':
+ *  post:
+ *     tags:
+ *     - User Controller
+ *     summary: update user profile picture
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Email address of the user
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image file to upload
+ *     responses:
+ *      200:
+ *        description: Success
+ *      400:
+ *        description: invalid credentials
+ *      500:
+ *        description: Server Error
+ */
+
 router.post("/user/registration", userRegistration);
 router.post("/user/login", userLogin);
 router.post("/user/profile", userProfile);
 router.patch("/user/update", userUpdate);
 
+router.post("/user/upload/profile-pic", upload.single("image"), profilePicture);
 module.exports = router;
