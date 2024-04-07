@@ -22,21 +22,36 @@ const userProfile = async (req: Request, res: Response) => {
     console.log(existingUser);
     console.log("--------------------------------");
 
-    const userType = await User.findAll({ user_type: "public" });
+    if (existingUser.user_type === "admin") {
+      const privateUser = await User.findAll({ profile_type: "private" });
+      const publicUser = await User.findAll({ profile_type: "public" });
 
-    console.log("--------------------------------");
-    console.log(userType);
-    console.log("--------------------------------");
+      res.status(200).json({
+        message: "Admin user",
+        userProfile: {
+          profile_type: existingUser.profile_type,
+          name: existingUser.name,
+          public_user: [publicUser],
+          private_user: [privateUser],
+        },
+      });
+    } else {
+      const profileType = await User.findAll({ profile_type: "public" });
 
-    //show all users which are public users
-    res.status(200).json({
-      message: "User found",
-      userProfile: {
-        profile_type: existingUser.profile_type,
-        name: existingUser.name,
-        public_users: [userType],
-      },
-    });
+      console.log("--------------------------------");
+      console.log(profileType);
+      console.log("--------------------------------");
+
+      //show all users which are public users
+      res.status(200).json({
+        message: "User found",
+        userProfile: {
+          profile_type: existingUser.profile_type,
+          name: existingUser.name,
+          public_users: [profileType],
+        },
+      });
+    }
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

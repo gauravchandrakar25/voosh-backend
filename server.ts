@@ -15,6 +15,7 @@ connectDb();
 //using the dependancies
 app.use(cors());
 app.use(express.json());
+app.use("/", require("./route/user_route"));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript Server");

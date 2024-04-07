@@ -1,11 +1,20 @@
 import { Request, Response } from "express";
-const jwt = require("jwt");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 
 const userRegistration = async (req: Request, res: Response) => {
   try {
-    const { email, password, phone, confirmPassword } = req.body;
+    const { name, email, password, phone, confirmPassword, profile_type } =
+      req.body;
+
+    if (!name) {
+      res.status(400).json({ error: "Please enter user name" });
+    }
+
+    if (!profile_type) {
+      res.status(400).json({ error: "Please enter a valid user type" });
+    }
 
     if (!email) {
       res.status(400).json({ error: "Please enter a valid email" });

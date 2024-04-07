@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   },
   profile_img: {
     type: String,
-    required: true,
+    required: false,
   },
   bio: {
     type: String,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   },
   user_type: {
     type: String,
-    required: true,
+    required: false,
   },
   phone: {
     type: Number,
