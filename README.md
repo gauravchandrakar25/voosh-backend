@@ -29,6 +29,10 @@ This project is an enhanced backend API for an authentication system, built usin
 - **Hosting**: The API can be hosted on platforms like Heroku (optional).
 - **API Playground**: Swagger or similar tools can be used to create an API playground for testing (optional).
 
+## Swagger API Documentation
+
+Use /api-docs for swagger documentation
+
 ## Note
 
 Social login APIs were not implemented in this project due to time constraints. However, the system is designed to accommodate the integration of these APIs in future updates.
